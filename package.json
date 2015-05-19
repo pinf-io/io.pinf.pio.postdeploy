@@ -1,0 +1,9 @@
+{
+  "config": {
+    "pio.pinf.io/0": {
+      "on": {
+        "postdeploy": "./bin/install-and-link {{env.PIO_BIN_DIRPATH}}/io-pinf-pio-postdeploy"
+      }
+    }
+  }
+}

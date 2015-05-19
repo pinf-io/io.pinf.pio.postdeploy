@@ -1,0 +1,22 @@
+#!/bin/bash
+# Source https://github.com/cadorn/bash.origin
+. "$BO_ROOT_SCRIPT_PATH"
+function init {
+	eval BO_SELF_BASH_SOURCE="$BO_READ_SELF_BASH_SOURCE"
+	BO_deriveSelfDir ___TMP___ "$BO_SELF_BASH_SOURCE"
+	PGS_DIR="$___TMP___"
+
+
+	function postdeploy {
+		BO_log "$VERBOSE" "Running postdeploy"
+	}
+
+
+	local BASE_DIR=`pwd`
+	BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $BASE_DIR"
+	pushd "$BASE_DIR" > /dev/null
+		postdeploy "$BASE_DIR" $@
+	popd > /dev/null
+	BO_format "$VERBOSE" "FOOTER"
+}
+init $@
