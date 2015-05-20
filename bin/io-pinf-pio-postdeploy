@@ -8,15 +8,23 @@ function init {
 
 
 	function postdeploy {
-		BO_log "$VERBOSE" "Running postdeploy"
+		BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $PIO_SERVICE_HOME"
+		pushd "$PIO_SERVICE_HOME" > /dev/null
+
+#		cat sync/package.program.json
+
+			if ! BO_has node; then
+				echo "ERROR: 'node' not on PATH!"
+				exit 1
+			fi
+
+			node "$PGS_DIR/../postdeploy.js" $@
+
+		popd > /dev/null
+		BO_format "$VERBOSE" "FOOTER"
 	}
 
+	postdeploy
 
-	local BASE_DIR=`pwd`
-	BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $BASE_DIR"
-	pushd "$BASE_DIR" > /dev/null
-		postdeploy "$BASE_DIR" $@
-	popd > /dev/null
-	BO_format "$VERBOSE" "FOOTER"
 }
 init $@

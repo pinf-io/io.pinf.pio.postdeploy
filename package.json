@@ -1,4 +1,5 @@
 {
+	"name": "io.pinf.pio.postdeploy",
   "config": {
     "pio.pinf.io/0": {
       "on": {
