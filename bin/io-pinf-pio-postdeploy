@@ -9,12 +9,7 @@ function init {
 	function postdeploy {
 		BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $(pwd)"
 
-		if ! BO_has node; then
-			echo "ERROR: 'node' not on PATH!"
-			exit 1
-		fi
-
-		node "$PGS_DIR/../postdeploy.js" $@
+		BO_run_node "$PGS_DIR/../postdeploy.js" $@
 
 		BO_format "$VERBOSE" "FOOTER"
 	}
