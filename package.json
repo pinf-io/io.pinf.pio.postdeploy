@@ -1,9 +1,12 @@
 {
 	"name": "io.pinf.pio.postdeploy",
+	"bin": {
+		"io-pinf-pio-postdeploy": "bin/io-pinf-pio-postdeploy"
+	},
   "config": {
     "pio.pinf.io/0": {
       "on": {
-        "postdeploy": "./bin/install-and-link {{env.PIO_BIN_DIRPATH}}/io-pinf-pio-postdeploy"
+        "postactivate": "$PIO_SERVICE_LIVE_INSTALL_DIRPATH/bin/link-to $PIO_BIN_DIRPATH/io-pinf-pio-postdeploy"
       }
     }
   }

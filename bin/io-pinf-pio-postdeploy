@@ -6,21 +6,16 @@ function init {
 	BO_deriveSelfDir ___TMP___ "$BO_SELF_BASH_SOURCE"
 	PGS_DIR="$___TMP___"
 
-
 	function postdeploy {
-		BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $PIO_SERVICE_HOME"
-		pushd "$PIO_SERVICE_HOME" > /dev/null
+		BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $(pwd)"
 
-#		cat sync/package.program.json
+		if ! BO_has node; then
+			echo "ERROR: 'node' not on PATH!"
+			exit 1
+		fi
 
-			if ! BO_has node; then
-				echo "ERROR: 'node' not on PATH!"
-				exit 1
-			fi
+		node "$PGS_DIR/../postdeploy.js" $@
 
-			node "$PGS_DIR/../postdeploy.js" $@
-
-		popd > /dev/null
 		BO_format "$VERBOSE" "FOOTER"
 	}
 
