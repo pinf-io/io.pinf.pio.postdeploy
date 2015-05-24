@@ -6,7 +6,7 @@ require('org.pinf.genesis.lib/lib/api').forModule(require, module, function (API
 
 	// TODO: init env from package.json overlayed by package.service.json
 
-	console.log("BOOTED postdeploy module with API11!", API);
+	console.log("BOOTED postdeploy module with API11!", "API.OS", API.OS);
 
 
 	// TODO: Write wile: /etc/init/app-$PIO_SERVICE_ID_SAFE.conf
@@ -46,6 +46,34 @@ require('org.pinf.genesis.lib/lib/api').forModule(require, module, function (API
 		replaceVariables(
 			API.PATH.join(process.env.PIO_SERVICE_HOME, "sync/runtime/scripts/launch.sh"),
 			API.PATH.join(process.env.PIO_SERVICE_LIVE_RUNTIME_DIRPATH, "scripts/launch.sh")
+		);
+
+
+		var env = require(API.PATH.join(process.env.PIO_SERVICE_HOME, "sync", process.env.PIO_SERVICE_DESCRIPTOR_PATH)).env;
+		API.FS.writeFileSync(
+			process.env.PIO_SERVICE_ACTIVATE_FILEPATH,
+			[
+				'#!/bin/bash',
+
+                // These are needed at minimum to boot the pinf.io environment.
+				'export HOME=' + env.HOME,
+				'export BO_ROOT_SCRIPT_PATH=' + env.BO_ROOT_SCRIPT_PATH,
+
+				'# Source https://github.com/cadorn/bash.origin',
+				'. "' + env.BO_ROOT_SCRIPT_PATH + '"',
+				'function init {',
+				'	eval BO_SELF_BASH_SOURCE="$BO_READ_SELF_BASH_SOURCE"',
+				'	BO_deriveSelfDir ___TMP___ "$BO_SELF_BASH_SOURCE"',
+				'	PGS_DIR="$___TMP___"',
+				'',
+				'	BO_sourcePrototype "' + env.PIO_BIN_DIRPATH + '/activate"',
+				(Object.keys(env).map(function (name) {
+					return "	export " + name + "=" + env[name];
+				})).join("\n"),
+				'}',
+				'init $@'
+			].join("\n"),
+			"utf8"
 		);
 
 
