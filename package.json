@@ -1,12 +1,12 @@
 {
-  "name": "io.pinf.pio.postdeploy",
+  "name": "io.pinf.pio.postsync",
   "bin": {
-    "io-pinf-pio-postdeploy": "bin/io-pinf-pio-postdeploy"
+    "io-pinf-pio-postsync": "bin/io-pinf-pio-postsync"
   },
   "config": {
     "pio.pinf.io/0": {
       "on": {
-        "postactivate": "$PIO_SERVICE_LIVE_INSTALL_DIRPATH/bin/link-to $PIO_BIN_DIRPATH/io-pinf-pio-postdeploy"
+        "postactivate": "$PIO_SERVICE_LIVE_INSTALL_DIRPATH/bin/link-to $PIO_BIN_DIRPATH/io-pinf-pio-postsync"
       }
     },
     "org.pinf.genesis.lib/0": {

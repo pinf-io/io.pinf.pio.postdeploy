@@ -6,7 +6,7 @@ require('org.pinf.genesis.lib/lib/api').forModule(require, module, function (API
 
 	// TODO: init env from package.json overlayed by package.service.json
 
-	console.log("BOOTED postdeploy module with API11!", "API.OS", API.OS);
+	console.log("BOOTED postsync module with API11!", "API.OS", API.OS);
 
 
 	// TODO: Write wile: /etc/init/app-$PIO_SERVICE_ID_SAFE.conf

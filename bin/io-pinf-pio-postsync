@@ -6,15 +6,15 @@ function init {
 	BO_deriveSelfDir ___TMP___ "$BO_SELF_BASH_SOURCE"
 	PGS_DIR="$___TMP___"
 
-	function postdeploy {
-		BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postdeploy for: $(pwd)"
+	function postsync {
+		BO_format "$VERBOSE" "HEADER" "io.pinf.pio.postsync for: $(pwd)"
 
-		BO_run_node "$PGS_DIR/../postdeploy.js" $@
+		BO_run_node "$PGS_DIR/../postsync.js" $@
 
 		BO_format "$VERBOSE" "FOOTER"
 	}
 
-	postdeploy
+	postsync
 
 }
 init $@

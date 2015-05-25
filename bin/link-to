@@ -8,7 +8,7 @@ function init {
 
 
 	rm -f "$1" > /dev/null || true
-	BO_log "$VERBOSE" "Linking '$PGS_DIR/io-pinf-pio-postdeploy' to '$1'"
-	ln -s "$PGS_DIR/io-pinf-pio-postdeploy" "$1"
+	BO_log "$VERBOSE" "Linking '$PGS_DIR/io-pinf-pio-postsync' to '$1'"
+	ln -s "$PGS_DIR/io-pinf-pio-postsync" "$1"
 }
 init $@
