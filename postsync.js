@@ -77,33 +77,47 @@ require('org.pinf.genesis.lib/lib/api').forModule(require, module, function (API
 		);
 
 
-		if (!API.FS.existsSync(API.PATH.join(process.env.PIO_SERVICE_LIVE_RUNTIME_DIRPATH, "scripts/run.sh"))) {
-			return;
+		function runScript (scriptName) {
+			return API.Q.denodeify(function (callback) {
+
+				API.console.verbose("Run script '" + scriptName + ".sh'.");
+
+				return API.FS.exists(API.PATH.join(
+					process.env.PIO_SERVICE_LIVE_RUNTIME_DIRPATH,
+					"scripts/" + scriptName + ".sh"
+				), function (exists) {
+					if (!exists) {
+						API.console.verbose("Skip run script '" + scriptName + ".sh'. It does not exist.");
+						return callback(null);
+					}
+					var proc = SPAWN("/bin/bash", [
+						scriptName + ".sh"
+					], {
+						cwd: API.PATH.join(process.env.PIO_SERVICE_LIVE_RUNTIME_DIRPATH, "scripts"),
+			            env: process.env
+			        });
+			        proc.stdout.on('data', function (data) {
+			            process.stdout.write(data);
+			        });
+			        proc.stderr.on('data', function (data) {
+			            process.stderr.write(data);
+			        });
+			        proc.on('close', function (code) {
+			            if (code !== 0) {
+			                console.error("ERROR: Script exited with code '" + code + "'");
+			                return callback(new Error("Script exited with code '" + code + "'"));
+			            }
+			            return callback(null);
+			        });
+				});
+			})();
 		}
-
-		return API.Q.denodeify(function (callback) {
-
-			var proc = SPAWN("/bin/bash", [
-				"run.sh"
-			], {
-				cwd: API.PATH.join(process.env.PIO_SERVICE_LIVE_RUNTIME_DIRPATH, "scripts"),
-	            env: process.env
-	        });
-	        proc.stdout.on('data', function (data) {
-	            process.stdout.write(data);
-	        });
-	        proc.stderr.on('data', function (data) {
-	            process.stderr.write(data);
-	        });
-	        proc.on('close', function (code) {
-	            if (code !== 0) {
-	                console.error("ERROR: Remote command exited with code '" + code + "'");
-	                return callback(new Error("Remote command exited with code '" + code + "'"));
-	            }
-	            return callback(null);
-	        });
-		})();
 	}
+
+	return runScript("configure").then(function () {
+
+		runScript("run");
+	});
 
 });
 
