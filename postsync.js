@@ -50,6 +50,14 @@ require('org.pinf.genesis.lib/lib/api').forModule(require, module, function (API
 
 
 		var env = require(API.PATH.join(process.env.PIO_SERVICE_HOME, "sync", process.env.PIO_SERVICE_DESCRIPTOR_PATH)).env;
+
+		if (API.VERBOSE) {
+			env.VERBOSE = "1";
+		}
+		if (API.DEBUG) {
+			env.DEBUG = "1";
+		}
+
 		API.FS.writeFileSync(
 			process.env.PIO_SERVICE_ACTIVATE_FILEPATH,
 			[
